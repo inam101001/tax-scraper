@@ -1,20 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
-import { DocumentCollection } from 'arangojs/collection';
-import { JurisdictiondbService } from './jurisdictiondb.service';
 
 @Injectable()
 export class JurisdictionService {
-
-    constructor(private readonly databaseService: JurisdictiondbService) { }
-
-
     /**
- * Scrapes CSV data from the provided URL and saves it to the specified database collection.
- * @param url - The URL of the CSV file to scrape.
- * @param collectionName - The name of the database collection to save the scraped data.
- */
-    async scrapeCSVData(url: string, collectionName: string) {
+     * Scrapes CSV data from the provided URL and returns it as an array of objects.
+     * @param url - The URL of the CSV file to scrape.
+     */
+    async scrapeCSVData(url: string): Promise<any[]> {
         try {
             // Fetch the CSV file from the provided URL
             const response = await axios.get(url);
@@ -35,22 +28,8 @@ export class JurisdictionService {
                 }, {});
             });
 
-            // Get the database collection, create it if it doesn't exist
-            const collection: DocumentCollection = await this.databaseService.getCollection(collectionName);
-
-            // Check if the collection exists
-            if (!(await collection.exists())) {
-                console.log(`Collection ${collectionName} does not exist. Creating collection...`);
-                await collection.create({});  // Create collection with default options
-                console.log(`Collection ${collectionName} created.`);
-            }
-
-            // Insert the scraped data into the collection
-            for (const item of data) {
-                await collection.save(item);
-            }
-
-            console.log(`CSV data from ${url} scraped and saved to ${collectionName}`);
+            console.log(`CSV data from ${url} scraped successfully`);
+            return data;
         } catch (error) {
             console.error('Error scraping CSV:', error);
             throw error;
