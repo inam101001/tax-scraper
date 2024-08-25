@@ -1,3 +1,9 @@
+import { IncomeTaxDbService } from './incomeTax-rates-brackets/incometax-db.service';
+import { IncomeTaxService } from './incomeTax-rates-brackets/incometax.service';
+import { IncomeTaxController } from './incomeTax-rates-brackets/incometax.controller';
+import { PaginationController } from './median-property-taxes/pagination.controller';
+import { PaginationDbService } from './median-property-taxes/pagination-db.service';
+import { PaginationService } from './median-property-taxes/pagination.service';
 import { IncomeController } from './income-taxes/income.controller';
 import { IncomeDbService } from './income-taxes/income-db.service';
 import { IncomeService } from './income-taxes/income.service';
@@ -14,12 +20,18 @@ import { AppService } from './app.service';
 @Module({
   imports: [],
   controllers: [
-        IncomeController, 
+        IncomeTaxController, 
+        PaginationController, 
+    IncomeController,
     PropertyController,
     JurisdictionController, AppController],
   providers: [
-        IncomeDbService, 
-        IncomeService, 
+        IncomeTaxDbService, 
+        IncomeTaxService, 
+    PaginationDbService,
+    PaginationService,
+    IncomeDbService,
+    IncomeService,
     PropertyDbService,
     PropertyService,
     JurisdictiondbService,
